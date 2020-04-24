@@ -1,14 +1,14 @@
 <?php
 
-namespace Cirote\Crud\ServiceProvider;
+namespace Cirote\Activos\ServiceProvider;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
-class CrudServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
 	public function register()
 	{
-		$this->register_migrations();
+//		$this->register_migrations();
 
 		$this->register_routes();
 
@@ -17,7 +17,7 @@ class CrudServiceProvider extends ServiceProvider
 
 	public function boot()
 	{
-		$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'crud');
+		$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'activos');
 	}
 
 	private function register_migrations()
@@ -32,7 +32,7 @@ class CrudServiceProvider extends ServiceProvider
 
 	private function register_views()
 	{
-		$this->loadViewsFrom(__DIR__ . '/../Views', 'crud');
+		$this->loadViewsFrom(__DIR__ . '/../Views', 'activos');
 	}
 
 }

@@ -1,3 +1,3 @@
 <?php
 
-Route::middleware(['web'])->resource('crud', 'Cirote\Crud\Controllers\CrudController');
+Route::get('/home', 'Cirote\Activos\Controllers\HomeController@index')->name('home');
