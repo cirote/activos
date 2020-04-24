@@ -7,13 +7,8 @@
     </a>
 </li>
 
-<li class="header">Opciones Inexistentes</li>
-<li class="{{ Request::routeIs('inexistentes.index') ? "active" : "" }}">
-    <a href="{{ route('inexistentes.index', [], false) }}">
-        <i class="fa fa-table"></i> <span>Lista 2</span>
-    </a>
-</li>
+@includeIf('opciones::menues.inexistentes')
 
-@include('opciones::menues.inexistentes')
+@includeIf('estrategias::menues.menu')
 
 @endsection
