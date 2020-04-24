@@ -1,13 +1,13 @@
-## Crud de ejemplo
+## Base para el sistema de Activos
 
-Proyecto para la prueba de un CRUD.
+Proyecto para para el seguimiento de activos financieros.
 
 ### Instalacion
 
 Via [Composer](http://getcomposer.org/). 
 
 ``` bash
-$ composer require cirote/crud
+$ composer require cirote/activos
 ```
 
 Realizar las migraciones
@@ -21,5 +21,5 @@ $ php artisan migrate
 Via web
 
 ``` bash
-https://yoursite.com/crud
+https://yoursite.com/
 ```
