@@ -64,34 +64,6 @@ class Call extends Activo
 		return 100;
 	}
 
-	private $bid;
-
-	public function getBidAttribute()
-	{
-		if (!$this->bid)
-		{
-			$this->bid = new Bid();
-
-			$this->bid->subyacente = $this;
-		}
-
-		return $this->bid;
-	}
-
-	private $ask;
-
-	public function getAskAttribute()
-	{
-		if (!$this->ask)
-		{
-			$this->ask = new Ask();
-
-			$this->ask->subyacente = $this;
-		}
-
-		return $this->ask;
-	}
-
 	private $precio_teorico;
 
 	public function getPrecioTeoricoAttribute() 

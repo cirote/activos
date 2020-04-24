@@ -197,6 +197,34 @@ class Activo extends Model
         return $this->costoDolares ? $this->valorActualDolares / $this->costoDolares * 100 : 0;
     }
 
+    private $bid;
+
+    public function getBidAttribute()
+    {
+        if (!$this->bid)
+        {
+            $this->bid = new Bid();
+
+            $this->bid->subyacente = $this;
+        }
+
+        return $this->bid;
+    }
+
+    private $ask;
+
+    public function getAskAttribute()
+    {
+        if (!$this->ask)
+        {
+            $this->ask = new Ask();
+
+            $this->ask->subyacente = $this;
+        }
+
+        return $this->ask;
+    }
+
     public function calls()
     {
         return $this->hasMany(Call::class, 'principal_id');
