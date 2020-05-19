@@ -24,7 +24,7 @@ class Moneda extends Activo
             ->where('moneda_id', $peso->id);
 
         return DB::table('historicos')
-            ->select('fecha', 'cierre as dolares', 'pesos', DB::raw('(2 * pesos / cierre) as cotizacion'))
+            ->select('fecha', 'cierre as dolares', 'pesos', DB::raw('(pesos / cierre) as cotizacion'))
             ->where('activo_id', $ypf->id)
             ->where('moneda_id', $dolar->id)
             ->joinSub($enPesos, 'enPesos', function ($join) {
@@ -58,7 +58,7 @@ class Moneda extends Activo
         if (is_string($fecha))
             $fecha = Carbon::create($fecha);
 
-        $corte = Carbon::create(2019, 9, 30, 0, 0, 0);
+        $corte = Carbon::create(2019, 8, 30, 0, 0, 0);
 
         if ($fecha->greaterThan($corte))
         {
