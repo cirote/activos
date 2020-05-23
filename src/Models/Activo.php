@@ -13,10 +13,13 @@ use App\Models\Operaciones\ComisionCompraVenta;
 use App\Models\Operaciones\Suscripcion;
 use Cirote\Opciones\Models\Call;
 use Cirote\Opciones\Models\Put;
+use Cirote\Activos\Config\Config;
 
 class Activo extends Model
 {
     use HasChildren;
+
+    protected $table = Config::PREFIJO . Config::ACTIVOS;
 
     protected $guarded = [];
 

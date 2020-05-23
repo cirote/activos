@@ -16,8 +16,9 @@
     },
     "require": {
         "cirote/adminlte": "@dev",
-        "cirote/activos_opciones": "@dev",
         "cirote/activos_estrategias": "@dev",
+        "cirote/activos_movimientos": "@dev",
+        "cirote/activos_opciones": "@dev",
         "calebporzio/parental": "*",
         "spatie/laravel-collection-macros": "*"
     },

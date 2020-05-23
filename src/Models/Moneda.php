@@ -55,6 +55,9 @@ class Moneda extends Activo
 
     static public function cotizacion($fecha)
     {
+        if (! $fecha)
+            return 0;
+
         if (is_string($fecha))
             $fecha = Carbon::create($fecha);
 

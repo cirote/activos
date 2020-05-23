@@ -7,6 +7,8 @@
     </a>
 </li>
 
+@includeIf('movimientos::menues.menu')
+
 @includeIf('opciones::menues.inexistentes')
 
 @includeIf('estrategias::menues.menu')

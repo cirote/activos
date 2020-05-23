@@ -8,7 +8,7 @@ class ServiceProvider extends BaseServiceProvider
 {
 	public function register()
 	{
-//		$this->register_migrations();
+		$this->register_migrations();
 
 		$this->register_routes();
 
