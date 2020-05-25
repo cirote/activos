@@ -7,6 +7,13 @@
     </a>
 </li>
 
+<li class="header">BROKER's</li>
+<li class="{{ Request::routeIs('brokers.index') ? "active" : "" }}">
+    <a href="{{ route('brokers.index', [], false) }}">
+        <i class="fa fa-table"></i> <span>Cuadro resumen</span>
+    </a>
+</li>
+
 @includeIf('movimientos::menues.menu')
 
 @includeIf('opciones::menues.inexistentes')
