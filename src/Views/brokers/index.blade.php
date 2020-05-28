@@ -59,6 +59,15 @@
 							<td></td>
 							<td align="right"><b>{{ number_format($suma_dolares, 2, ',', '.') }}</b></td>
 						</tr>
+						<tr>
+							<td></td>
+							<td colspan="3"><b>Valor actual de las posiciones abiertas</b></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td align="right"><b>{{ number_format($valorActual, 2, ',', '.') }}</b></td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
