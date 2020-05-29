@@ -7,6 +7,10 @@ class Config
 	const PREFIJO            = 'ac_';
 
 	const ACTIVOS            = 'activos';
+	const TICKERS            = 'tickers';
+	const BOLSAS             = 'bolsas';
+	const MERCADOS           = 'mercados';
+	const PRECIOS            = 'precios';
 
 	const BROKERS            = 'brokers';
 

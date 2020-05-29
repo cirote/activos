@@ -15,7 +15,7 @@ use Cirote\Opciones\Models\Call;
 use Cirote\Opciones\Models\Put;
 use Cirote\Activos\Config\Config;
 
-class Activo extends Model
+class Activo_viejo extends Model
 {
     use HasChildren;
 

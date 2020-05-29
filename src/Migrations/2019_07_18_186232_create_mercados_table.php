@@ -3,22 +3,29 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Cirote\Activos\Config\Config;
 
 class CreateMercadosTable extends Migration
 {
     public function up()
     {
-        Schema::create('mercados', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create(Config::PREFIJO . Config::MERCADOS, function (Blueprint $table) 
+        {
+            $table->increments('id');
             $table->string('nombre');
-            $table->integer('bolsa_id')->unsigned()->refers('id')->on('bolsas');
-            $table->integer('moneda_id')->unsigned()->refers('id')->on('activos');
+
+            $table->integer('bolsa_id')->unsigned();
+            $table->foreign('bolsa_id')->references('id')->on(Config::PREFIJO . Config::BOLSAS);
+
+            $table->integer('moneda_id')->unsigned();
+            $table->foreign('moneda_id')->references('id')->on(Config::PREFIJO . Config::ACTIVOS);
+
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('mercados');
+        Schema::dropIfExists(Config::PREFIJO . Config::MERCADOS);
     }
 }

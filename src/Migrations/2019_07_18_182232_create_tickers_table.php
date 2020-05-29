@@ -3,31 +3,32 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Cirote\Activos\Config\Config;
 
 class CreateTickersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+
     public function up()
     {
-        Schema::create('tickers', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('activo_id')->index()->references('id')->on('activos');
-            $table->string('ticker', 20)->unique()->index();
+        Schema::create(Config::PREFIJO . Config::TICKERS, function (Blueprint $table) 
+        {
+            $table->increments('id');
+            $table->string('ticker', 20)->unique();
+
+            $table->integer('activo_id')->unsigned();
+            $table->foreign('activo_id')->references('id')->on(Config::PREFIJO . Config::ACTIVOS);
+            
+            $table->string('tipo')->nullable()->default(null);
+            $table->double('ratio')->default(1);
+            $table->boolean('principal')->default(false);
+            $table->boolean('precio_referencia_pesos')->default(false);
+            $table->boolean('precio_referencia_dolares')->default(false);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
-        Schema::dropIfExists('tickers');
+        Schema::dropIfExists(Config::PREFIJO . Config::TICKERS);
     }
 }

@@ -8,8 +8,9 @@ class CreateActivosMercadosTable extends Migration
 {
     public function up()
     {
-        Schema::create('activo_mercado', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('activo_mercado', function (Blueprint $table) 
+        {
+            $table->increments('id');
             $table->integer('mercado_id')->unsigned()->refers('id')->on('mercados');
             $table->integer('activo_id')->unsigned()->refers('id')->on('activos');
             $table->timestamps();

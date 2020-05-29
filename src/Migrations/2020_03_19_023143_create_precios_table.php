@@ -3,19 +3,27 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Cirote\Activos\Config\Config;
 
 class CreatePreciosTable extends Migration
 {
     public function up()
     {
-        Schema::create('precios', function (Blueprint $table) 
+        Schema::create(Config::PREFIJO . Config::PRECIOS, function (Blueprint $table) 
         {
             $table->bigIncrements('id');
 
-            $table->integer('activo_id')->index()->unsigned()->refers('id')->on('activos');
-            $table->integer('ticker_id')->index()->unsigned()->refers('id')->on('tickers');
-            $table->integer('mercado_id')->index()->unsigned()->refers('id')->on('mercados');
-            $table->integer('moneda_id')->index()->unsigned()->refers('id')->on('activos');
+            $table->integer('activo_id')->unsigned();
+            $table->foreign('activo_id')->references('id')->on(Config::PREFIJO . Config::ACTIVOS);
+
+            $table->integer('ticker_id')->unsigned();
+            $table->foreign('ticker_id')->references('id')->on(Config::PREFIJO . Config::TICKERS);
+
+            $table->integer('mercado_id')->index()->unsigned();
+            $table->foreign('mercado_id')->references('id')->on(Config::PREFIJO . Config::MERCADOS);
+
+            $table->integer('moneda_id')->unsigned();
+            $table->foreign('moneda_id')->references('id')->on(Config::PREFIJO . Config::ACTIVOS);
 
             $table->double('bid_precio')->nullable()->default(null);
             $table->integer('bid_cantidad')->nullable()->default(null);
@@ -31,6 +39,6 @@ class CreatePreciosTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('precios');
+        Schema::dropIfExists(Config::PREFIJO . Config::PRECIOS);
     }
 }

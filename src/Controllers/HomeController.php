@@ -6,7 +6,7 @@ use Scheb\YahooFinanceApi\ApiClientFactory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Cirote\Activos\Models\Inexistente;
-use App\Models\Activos\Activo;
+use Cirote\Activos\Actions\Precios\ObtenerPreciosAction;
 
 class HomeController extends Controller
 {
@@ -18,6 +18,12 @@ class HomeController extends Controller
 
 	public function prueba()
     {
+        $api = resolve(ObtenerPreciosAction::class);
+
+        dd($api->execute('GGAL'));
+
+        die('Terminé');
+
     	$client = ApiClientFactory::createApiClient();
 
         //	$searchResult = $client->search("Galicia");

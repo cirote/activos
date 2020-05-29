@@ -3,6 +3,7 @@
 namespace Cirote\Activos\ServiceProvider;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Cirote\Activos\Actions\Precios\ObtenerPreciosAction;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -18,6 +19,16 @@ class ServiceProvider extends BaseServiceProvider
 	public function boot()
 	{
 		$this->loadTranslationsFrom(__DIR__ . '/../Translations', 'activos');
+
+		$this->bind_class();
+	}
+
+	private function bind_class()
+	{
+		$this->app->singleton(ObtenerPreciosAction::class, function ($app) 
+		{
+    		return new ObtenerPreciosAction();
+		});
 	}
 
 	private function register_migrations()

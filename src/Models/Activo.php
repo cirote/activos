@@ -4,15 +4,10 @@ namespace Cirote\Activos\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Tightenco\Parental\HasChildren;
-use App\Models\Operaciones\Compra;
-use App\Models\Operaciones\EjercicioVendedor;
-use App\Models\Operaciones\Operacion;
-use App\Models\Operaciones\Venta;
-use App\Models\Operaciones\ComisionCompraVenta;
-use App\Models\Operaciones\Suscripcion;
+use Cirote\Activos\Actions\Precios\ObtenerPreciosAction;
+use Cirote\Activos\Config\Config;
 use Cirote\Opciones\Models\Call;
 use Cirote\Opciones\Models\Put;
-use Cirote\Activos\Config\Config;
 
 class Activo extends Model
 {
@@ -24,30 +19,20 @@ class Activo extends Model
 
     protected $dates = ['vencimiento', 'created_at', 'updated_at'];
 
+    private $obtenerPrecios;
+
+    public function __construct($attributes = array())  
+    {
+        parent::__construct($attributes);
+
+        $this->obtenerPrecios = resolve(ObtenerPreciosAction::class);
+    }
+
     static public function byName($name)
     {
         return static::where('denominacion', $name)->first();
     }
 
-    static public function conStock()
-    {
-        return static::orderBy('denominacion')->with('operaciones', 'precio', 'ticker', 'calls')->get()->filter(function ($value, $key) 
-        {
-            return $value->cantidad;
-        });
-    }
-
-    static public function sinStock()
-    {
-        return static::orderBy('denominacion')->with('operaciones', 'precio', 'ticker')->get()->filter(function ($value, $key) 
-        {
-            return !$value->cantidad;
-        });
-    }
-
-    /*
-     * Funciones con tickers
-     */
     static public function byTicker($ticker)
     {
         $tickerGuardado = Ticker::byName($ticker);
@@ -58,9 +43,16 @@ class Activo extends Model
         return null;
     }
 
-    public function ticker()
+    public function getTickerAttribute()
     {
-        return $this->hasOne(Ticker::class, 'activo_id');
+        $ticker = $this->tickers->firstWhere('principal', true);
+
+        if ($ticker)
+        {
+            return $ticker;
+        }
+
+        return $this->tickers->first();
     }
 
     public function tickers()
@@ -68,18 +60,19 @@ class Activo extends Model
         return $this->hasMany(Ticker::class, 'activo_id');
     }
 
-    public function agregarTicker($ticker)
+    public function agregarTicker($ticker, $tipo = '', $ratio = 1, $principal = false, $pesos = false, $dolares = false)
     {
         $this->tickers()->firstOrCreate([
-            'ticker' => $ticker
+            'ticker' => $ticker,
+            'tipo' => $tipo,
+            'ratio' => $ratio,
+            'principal' => $principal,
+            'precio_referencia_pesos' => $pesos,
+            'precio_referencia_dolares' => $dolares,
         ]);
 
         return $this;
     }
-
-    /*
-     * Funciones con las bolsas
-     */
 
     public function broker()
     {
@@ -99,81 +92,6 @@ class Activo extends Model
         return $this->hasMany(Operacion::class, 'activo_id')->orderBy('fecha');
     }
 
-    private $cantidad_de_activos;
-
-    public function getCantidadAttribute()
-    {
-        if (! $this->cantidad_de_activos)
-        {
-            $this->cantidad_de_activos = 0;
-
-            foreach ($this->operaciones as $operacion)
-            {
-                if ($operacion instanceof Compra)
-                {
-                    $this->cantidad_de_activos += $operacion->cantidad;
-                }
-
-                if ($operacion instanceof Suscripcion)
-                {
-                    $this->cantidad_de_activos += $operacion->cantidad;
-                }
-
-                if ($operacion instanceof Venta)
-                {
-                    $this->cantidad_de_activos -= $operacion->cantidad;
-                }
-
-                if ($operacion instanceof EjercicioVendedor)
-                {
-                    $this->cantidad_de_activos -= $operacion->cantidad;
-                }
-            }
-        }
-
-        return $this->cantidad_de_activos;
-    }
-
-    private $costo_de_los_activos;
-
-    public function getCostoDolaresAttribute()
-    {
-        if (! $this->costo_de_los_activos)
-        {
-            $this->costo_de_los_activos = 0;
-
-            foreach ($this->operaciones as $operacion)
-            {
-                if ($operacion instanceof Compra)
-                {
-                    $this->costo_de_los_activos += $operacion->dolares;
-                }
-
-                if ($operacion instanceof Suscripcion)
-                {
-                    $this->costo_de_los_activos += $operacion->dolares;
-                }
-
-                if ($operacion instanceof Venta)
-                {
-                    $this->costo_de_los_activos -= $operacion->dolares;
-                }
-
-                if ($operacion instanceof EjercicioVendedor)
-                {
-                    $this->costo_de_los_activos -= $operacion->dolares;
-                }
-
-                if ($operacion instanceof ComisionCompraVenta)
-                {
-                    $this->costo_de_los_activos += $operacion->dolares;
-                }
-            }
-        }
-
-        return $this->costo_de_los_activos;
-    }
-
     public function precio()
     {
         return $this->hasOne(Precio::class, 'activo_id');
@@ -186,6 +104,13 @@ class Activo extends Model
 
     public function getPrecioActualDolaresAttribute()
     {
+        $ticker = $this->tickers->firstWhere('precio_referencia_dolares', true);
+
+        if ($ticker)
+        {
+            return $this->obtenerPrecios->execute($ticker->ticker)->getRegularMarketPrice() / $ticker->ratio;
+        }
+
         return $this->precio->precio_dolares ?? 0;
     }
 
