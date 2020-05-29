@@ -4,6 +4,7 @@ namespace Cirote\Activos\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Tightenco\Parental\HasChildren;
+use App\Models\Broker;
 use App\Models\Operaciones\Compra;
 use App\Models\Operaciones\EjercicioVendedor;
 use App\Models\Operaciones\Operacion;

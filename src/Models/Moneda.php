@@ -2,7 +2,6 @@
 
 namespace Cirote\Activos\Models;
 
-
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Tightenco\Parental\HasParent;

@@ -2,7 +2,6 @@
 
 namespace Cirote\Activos\Models;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class Ticker extends Model

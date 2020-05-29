@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/home', 'Cirote\Activos\Controllers\HomeController@index')->name('home');
+Route::get('/home', 'Cirote\Activos\Controllers\HomeController@prueba')->name('home');
 
 Route::middleware(['web'])->namespace('Cirote\Activos\Controllers')
 	->prefix('brokers')

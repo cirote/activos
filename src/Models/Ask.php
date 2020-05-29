@@ -2,7 +2,6 @@
 
 namespace Cirote\Activos\Models;
 
-
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 

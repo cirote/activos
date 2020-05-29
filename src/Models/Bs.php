@@ -2,7 +2,6 @@
 
 namespace Cirote\Activos\Models;
 
-
 trait Bs
 {
 	/*

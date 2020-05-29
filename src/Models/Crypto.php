@@ -2,7 +2,6 @@
 
 namespace Cirote\Activos\Models;
 
-
 use App\Models\Mercados\Mercado;
 use Tightenco\Parental\HasParent;
 

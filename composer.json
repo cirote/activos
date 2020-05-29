@@ -20,7 +20,8 @@
         "cirote/activos_movimientos": "@dev",
         "cirote/activos_opciones": "@dev",
         "calebporzio/parental": "*",
-        "spatie/laravel-collection-macros": "*"
+        "spatie/laravel-collection-macros": "*",
+        "scheb/yahoo-finance-api": "*"
     },
     "require-dev": {
 
