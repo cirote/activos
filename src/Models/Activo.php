@@ -5,6 +5,7 @@ namespace Cirote\Activos\Models;
 use Illuminate\Database\Eloquent\Model;
 use Tightenco\Parental\HasChildren;
 use Cirote\Activos\Actions\Precios\ObtenerPreciosAction;
+use Cirote\Activos\Actions\Precios\ObtenerPrecioDolarAction;
 use Cirote\Activos\Config\Config;
 use Cirote\Opciones\Models\Call;
 use Cirote\Opciones\Models\Put;
@@ -21,11 +22,15 @@ class Activo extends Model
 
     private $obtenerPrecios;
 
+    private $obtenerPrecioDolar;
+
     public function __construct($attributes = array())  
     {
         parent::__construct($attributes);
 
         $this->obtenerPrecios = resolve(ObtenerPreciosAction::class);
+
+        $this->obtenerPrecioDolar = resolve(ObtenerPrecioDolarAction::class);
     }
 
     static public function byName($name)
@@ -99,19 +104,44 @@ class Activo extends Model
 
     public function getPrecioActualPesosAttribute()
     {
+        if ($precio = $this->getPrecio('precio_referencia_pesos'))
+        {
+            return $precio;
+        }
+
         return $this->precio->precio_pesos ?? 0;
     }
 
     public function getPrecioActualDolaresAttribute()
     {
-        $ticker = $this->tickers->firstWhere('precio_referencia_dolares', true);
-
-        if ($ticker)
+        if ($precio = $this->getPrecio('precio_referencia_dolares'))
         {
-            return $this->obtenerPrecios->execute($ticker->ticker)->getRegularMarketPrice() / $ticker->ratio;
+            return $precio;
+        }
+
+        if ($precio = $this->getPrecio('precio_referencia_pesos'))
+        {
+            return $precio / $this->obtenerPrecioDolar->execute();
         }
 
         return $this->precio->precio_dolares ?? 0;
+    }
+
+    private function getPrecio($campoReferencia)
+    {
+        $ticker = $this->tickers->firstWhere($campoReferencia, true);
+
+        if ($ticker)
+        {
+            if ($datos = $this->obtenerPrecios->execute($ticker->ticker))
+            {
+                return $datos->getRegularMarketPrice() / $ticker->ratio;
+            }
+
+            dd($ticker);
+        }
+
+        return null;
     }
 
     public function getValorActualDolaresAttribute()

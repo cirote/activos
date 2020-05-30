@@ -4,6 +4,7 @@ namespace Cirote\Activos\ServiceProvider;
 
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Cirote\Activos\Actions\Precios\ObtenerPreciosAction;
+use Cirote\Activos\Actions\Precios\ObtenerPrecioDolarAction;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -28,6 +29,11 @@ class ServiceProvider extends BaseServiceProvider
 		$this->app->singleton(ObtenerPreciosAction::class, function ($app) 
 		{
     		return new ObtenerPreciosAction();
+		});
+
+		$this->app->singleton(ObtenerPrecioDolarAction::class, function ($app) 
+		{
+    		return new ObtenerPrecioDolarAction();
 		});
 	}
 
